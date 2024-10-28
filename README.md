@@ -1,7 +1,7 @@
 # Automatic commit script
 
 A bash script that pushes all files (and optionally logs of the process) within a specified path to a git repository.  
-⚠️ **Add `*.log` to `.gitignore` immediately** to avoid storing logs on GitHub and reduce commit count! ⚠️
+⚠️ Add `*.log` to `.gitignore` to avoid storing logs on GitHub. ⚠️
 
 ## Task Configuration
 

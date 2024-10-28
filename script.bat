@@ -1,27 +1,31 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM TEST
-
 REM Path to repo folder
-set FOLDER="your\path\file.bat"
+set FOLDER="X:\your\path"
 cd /d "%FOLDER%"
 
 set LOG=latest.log
 
-echo %date% %time% > %LOG%
-
 REM Check if any changes were made
 git diff-index --quiet HEAD
 IF %ERRORLEVEL% EQU 0 (
+    echo %date% %time% > %LOG%
     echo No changes to commit. >> %LOG%
+    REM Push logs to github (add logs to .gitignore to prevent [and run git rm -r --cached if already commited])
+    git add %LOG%
+    git commit -m "Log update: %date% %time%"
+    git push origin main
     exit
 )
+
+REM Clear logs prior to commiting
+echo. > %LOG%
+
 (
     REM File size limit (30 MB)
     set LIMIT=30000000
     
-    echo.
     echo Scanning dirs...
     echo.
     
@@ -80,18 +84,13 @@ IF %ERRORLEVEL% EQU 0 (
     git commit -m "Automated commit: %date% %time%"
     git push origin main
 
-    echo .
-    echo Committing logs...
-    echo.
-
-    REM Push logs to github (add logs to .gitignore to prevent [and run git rm -r --cached if already commited])
-    git add %LOG%
-    git commit -m "Log update: %date% %time%"
-    git push origin main
-
-    echo.
-    echo "Finished!"
 ) >> %LOG% 2>&1
+
+REM Push logs to github (add logs to .gitignore to prevent [and run git rm -r --cached if already commited])
+git add %LOG%
+git commit -m "Log update: %date% %time%"
+git push origin main
+
 
 REM Finish
 exit
